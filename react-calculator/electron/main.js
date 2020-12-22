@@ -4,7 +4,6 @@ const url = require('url')
 
 let mainWindow;
 const isDevelopment = process.env.ELECTRON_START_DEVELOPMENT ? true : false;
-console.log(isDevelopment)
 
 function createWindow() {
     mainWindow = new BrowserWindow({
