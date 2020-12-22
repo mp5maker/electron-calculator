@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "electron/main.js",
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -22,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron:dev": "ELECTRON_START_DEVELOPMENT=true electron .",
+    "electron:build": "electron ."
   },
   "eslintConfig": {
     "extends": [
