@@ -6,3 +6,6 @@ export const THEME_DARK = 'dark'
 
 export const TEXT_PARAGRAPH = 'p'
 export const TEXT_CODE = 'code'
+
+export const LANGUAGE_ENGLISH = 'en'
+export const LANGUAGE_BENGALI = 'bn'
