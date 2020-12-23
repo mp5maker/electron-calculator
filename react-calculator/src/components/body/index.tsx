@@ -1,21 +1,21 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import { Box } from 'src/components/box'
-import { useTheme } from 'src/hooks/useTheme'
 
 interface BodyPropsInterface {}
+
+const BodyBox = styled(Box)`
+    height: 100vh;
+    background-color: ${(props) => props.theme.palette.background.default }
+`
 
 export const Body: React.FC<BodyPropsInterface> = ({
     children
 }): JSX.Element => {
-    const { theme } = useTheme()
-
     return (
-        <Box
-            style={{
-                height: '100vh',
-                backgroundColor: theme.palette.background.default
-            }}>
+        <BodyBox
+            helper={'center'}>
             { children }
-        </Box>
+        </BodyBox>
     )
 }

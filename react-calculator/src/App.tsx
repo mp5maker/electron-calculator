@@ -1,15 +1,19 @@
-import * as React from 'react';
-import { Body } from 'src/components/body'
-import { Text } from 'src/components/text'
+import * as React from "react";
+import { Route, Router } from "react-router-dom";
+import { history } from "src/utilities/history";
+import * as Routes from "src/constants/routes";
+
+import { Home } from "src/pages/home";
 
 export const App = () => {
   return (
-    <Body>
-      <Text>
-        yello
-      </Text>
-    </Body>
+    <Router history={history}>
+      <Route
+        exact={true}
+        path={Routes.Home.path}
+        component={Home} />
+    </Router>
   );
-}
+};
 
 export default App;

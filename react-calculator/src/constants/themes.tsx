@@ -3,7 +3,12 @@ const common = {
     "white": "#fff"
 }
 
-export const boxShadow = "0 1px 15px 0 rgba(0, 0, 0, 0.1)"
+export const boxShadow = ({
+    small
+}: any) => ({
+    small: `0 1px 15px 0 ${small}`
+})
+
 export const typography = {
     "h1": {
         "fontFamily": "Roboto, Helvetica, Arial, sans-serif",
@@ -132,6 +137,19 @@ export const zIndex = {
     "tooltip": 1500
 }
 
+export const helper = {
+    "center": {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    "spaceBetween": {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between"
+    }
+}
+
 export const themes: any = {
     light: {
         "palette": {
@@ -186,11 +204,12 @@ export const themes: any = {
             },
 
         },
-        boxShadow,
+        boxShadow: boxShadow({ small: '#c2c2c24d' }),
         typography,
         shape,
         transitions,
-        zIndex
+        zIndex,
+        helper
     },
     dark: {
         palette: {
@@ -244,11 +263,12 @@ export const themes: any = {
                 "level1": "#212121"
             },
         },
-        boxShadow,
+        boxShadow: boxShadow({ small: '#040404' }),
         typography,
         shape,
         transitions,
-        zIndex
+        zIndex,
+        helper
     }
 }
 
