@@ -1,7 +1,7 @@
-import * as React from 'react';
-import ReactDOM from 'react-dom';
-import 'src/index.scss';
-import App from 'src/App';
+import * as React from 'react'
+import ReactDOM from 'react-dom'
+import 'src/index.scss'
+import App from 'src/App'
 import { ThemeContextProvider } from 'src/contexts/ThemeContext'
 
 ReactDOM.render(
@@ -11,4 +11,4 @@ ReactDOM.render(
     </ThemeContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
-);
+)

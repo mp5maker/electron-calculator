@@ -5,50 +5,43 @@ import get from 'lodash/get'
 import { useTheme } from 'src/hooks/useTheme'
 
 interface BoxPropsInterface {
-    component?: 'div' | 'span',
-    style?: any,
-    helper?: 'center' | 'spaceBetween'
+  component?: 'div' | 'span'
+  style?: any
+  helper?: 'center' | 'spaceBetween'
 }
 
 const BoxDiv = styled.div``
 const BoxSpan = styled.span``
 
 export const Box: React.FC<BoxPropsInterface> = ({
-    component = BOX_TYPE_DIV,
-    children,
-    helper,
-    style,
-    ...props
+  component = BOX_TYPE_DIV,
+  children,
+  helper,
+  style,
+  ...props
 }) => {
-    const { theme } = useTheme()
+  const { theme } = useTheme()
 
-    const styleProps = {
-        ...(helper ? get(theme, `helper.${helper}`, {}) : {}),
-        ...(style ? style : {})
-    }
+  const styleProps = {
+    ...(helper ? get(theme, `helper.${helper}`, {}) : {}),
+    ...(style ? style : {})
+  }
 
-
-    if (component === BOX_TYPE_DIV) {
-        return (
-            <BoxDiv
-                style={styleProps}
-                {...props}>
-                { children }
-            </BoxDiv>
-        )
-    }
-
-    if (component === BOX_TYPE_SPAN) {
-        return (
-            <BoxSpan
-                style={styleProps}
-                {...props}>
-                { children }
-            </BoxSpan>
-        )
-    }
-
+  if (component === BOX_TYPE_DIV) {
     return (
-        <></>
+      <BoxDiv style={styleProps} {...props}>
+        {children}
+      </BoxDiv>
     )
+  }
+
+  if (component === BOX_TYPE_SPAN) {
+    return (
+      <BoxSpan style={styleProps} {...props}>
+        {children}
+      </BoxSpan>
+    )
+  }
+
+  return <></>
 }

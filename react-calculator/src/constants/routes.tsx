@@ -1,11 +1,11 @@
 interface RoutesInterface {
-    path: string,
-    alternativePath?: string,
-    state?: string
+  path: string
+  alternativePath?: string
+  state?: string
 }
 
 export const Home: RoutesInterface = {
-    path: "/",
-    alternativePath: "/home",
-    state: "home"
+  path: '/',
+  alternativePath: '/home',
+  state: 'home'
 }
