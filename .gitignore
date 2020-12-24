@@ -16,3 +16,4 @@ _book
 *.pdf
 yarn.lock
 dist
+package-lock.json
