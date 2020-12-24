@@ -10,7 +10,7 @@ i18n.use(initReactI18next).init({
     },
     bn: {
       translation: Bengali
-    },
+    }
   },
   lng: 'en',
   fallbackLng: 'en',

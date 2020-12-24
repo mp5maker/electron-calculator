@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box } from 'src/components/box'
 import { Text } from 'src/components/text'
+import { Button } from 'src/components/button'
 import { useTheme } from 'src/hooks/useTheme'
 
 interface CalculatorPropsInterface {
@@ -15,6 +16,29 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
 }): JSX.Element => {
   const { theme } = useTheme()
   const { t } = useTranslation()
+
+  const ButtonKey = ({ onClick, children }: any) => {
+    return (
+      <Button
+        onClick={onClick}
+        helper={'center'}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: theme.shape.borderRadius,
+          padding: theme.spacing.extraSmall,
+          marginTop: theme.spacing.extraSmall,
+          marginRight: theme.spacing.extraSmall,
+          marginBottom: theme.spacing.extraSmall,
+          boxShadow: theme.boxShadow.small,
+          backgroundColor: theme.palette.background.default,
+          border: 'none'
+        }}
+      >
+        {children}
+      </Button>
+    )
+  }
 
   return (
     <Box
@@ -39,25 +63,19 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
       <Box
         style={{
           display: 'flex',
-          justifyContent: 'flex-start',
+          justifyContent: 'space-between',
           alignItems: 'center'
         }}
       >
-        <Box
-          helper={'center'}
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: theme.shape.borderRadius,
-            padding: theme.spacing.extraSmall,
-            marginTop: theme.spacing.extraSmall,
-            marginRight: theme.spacing.extraSmall,
-            marginBottom: theme.spacing.extraSmall,
-            boxShadow: theme.boxShadow.small
-          }}
-        >
+        <ButtonKey>
+          <Text>{t('7')}</Text>
+        </ButtonKey>
+        <ButtonKey>
+          <Text>{t('8')}</Text>
+        </ButtonKey>
+        <ButtonKey>
           <Text>{t('9')}</Text>
-        </Box>
+        </ButtonKey>
       </Box>
     </Box>
   )
