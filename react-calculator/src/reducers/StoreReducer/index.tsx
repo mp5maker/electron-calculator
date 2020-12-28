@@ -1,10 +1,13 @@
 import {
   WORKING_CHANGE,
   HISTORY_CHANGE,
+  RESULT_CHANGE,
   WORKING_CLEAR,
   HISTORY_CLEAR,
+  RESULT_CLEAR,
   WORKING_REPLACE,
-  HISTORY_REPLACE
+  HISTORY_REPLACE,
+  RESULT_REPLACE
 } from 'src/reducers/StoreReducer/constants'
 import { defaultState } from 'src/reducers/StoreReducer/defaultState'
 import { StoreReducerPropsInterface } from 'src/reducers/StoreReducer/interface'
@@ -26,6 +29,11 @@ export const StoreReducer = (state = defaultState, action: StoreReducerPropsInte
         ...state,
         history: [...state.history, ...value]
       }
+    case RESULT_CHANGE:
+      return {
+        ...state,
+        result: [...state.result, ...value]
+      }
     case WORKING_CLEAR:
       return {
         ...state,
@@ -36,6 +44,11 @@ export const StoreReducer = (state = defaultState, action: StoreReducerPropsInte
         ...state,
         history: [...state.history, ...(isValueArray ? value : [])]
       }
+    case RESULT_CLEAR:
+      return {
+        ...state,
+        result: [...state.result, ...(isValueArray ? value : [])]
+      }
     case WORKING_REPLACE:
       return {
         ...state,
@@ -45,6 +58,11 @@ export const StoreReducer = (state = defaultState, action: StoreReducerPropsInte
       return {
         ...state,
         history: value
+      }
+    case RESULT_REPLACE:
+      return {
+        ...state,
+        result: value
       }
     default:
       return state

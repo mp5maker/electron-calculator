@@ -1,5 +1,6 @@
 export const defaultState = {
   type: '',
   history: [],
-  working: []
+  working: [],
+  result: []
 }

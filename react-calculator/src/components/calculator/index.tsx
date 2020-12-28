@@ -18,7 +18,8 @@ import {
   WORKING_CHANGE,
   HISTORY_CHANGE,
   WORKING_CLEAR,
-  WORKING_REPLACE
+  WORKING_REPLACE,
+  RESULT_CHANGE
 } from 'src/reducers/StoreReducer/constants'
 import get from 'lodash/get'
 
@@ -57,10 +58,11 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
   const { theme } = useTheme()
   const { t } = useTranslation()
   const { state, dispatch }: any = useStore()
+  const working = get(state, 'working', [])
+  const result = get(state, 'result', [])
+  const hasPreviousData = working[working.length - 1] ? true : false
 
   const pressed = ({ value }: any) => {
-    const working = get(state, 'working', [])
-
     if (keyMap.ENTER.includes(value)) {
       dispatch({
         type: HISTORY_CHANGE,
@@ -84,6 +86,11 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
         value: working.slice(0, working.length - 1)
       })
     }
+
+    // if (
+    //   hasPreviousData &&
+    //   !['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(working[working.length - 1])
+    // ) {}
 
     return dispatch({
       type: WORKING_CHANGE,
@@ -111,7 +118,7 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
     PI: () => pressed({ value: 'pi' }),
     MINUS: () => pressed({ value: '-' }),
     ENTER: () => pressed({ value: 'enter' }),
-    PLUS: () => pressed({ value: 'plus' })
+    PLUS: () => pressed({ value: '+' })
   }
 
   return (
@@ -126,7 +133,7 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
           display: 'block'
         }}
       >
-        <Display />
+        <Display working={working} />
         <Box helper={'spaceBetween'}>
           <CalculatorKey onClick={handlers.SPACE} variant={'shadow'} last={false}>
             {t('C')}
