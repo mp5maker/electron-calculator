@@ -1,0 +1,6 @@
+export const WORKING_CHANGE = 'working-change'
+export const HISTORY_CHANGE = 'history-change'
+export const WORKING_CLEAR = 'working-clear'
+export const HISTORY_CLEAR = 'history-clear'
+export const WORKING_REPLACE = 'working-replace'
+export const HISTORY_REPLACE = 'history-replace'

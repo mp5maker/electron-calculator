@@ -13,6 +13,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Display, CalculatorKey } from 'src/components/design/default'
 import { GlobalHotKeys } from 'react-hotkeys'
+import { useStore } from 'src/hooks/useStore'
+import {
+  WORKING_CHANGE,
+  HISTORY_CHANGE,
+  WORKING_CLEAR,
+  WORKING_REPLACE
+} from 'src/reducers/StoreReducer/constants'
+import get from 'lodash/get'
 
 interface CalculatorPropsInterface {
   width?: number
@@ -38,7 +46,7 @@ const keyMap = {
   SPACE: ['space'],
   PI: ['p+i'],
   MINUS: ['-'],
-  EQUALS: ['='],
+  ENTER: ['enter'],
   PLUS: ['shift+=']
 }
 
@@ -48,9 +56,39 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
 }): JSX.Element => {
   const { theme } = useTheme()
   const { t } = useTranslation()
+  const { state, dispatch }: any = useStore()
 
   const pressed = ({ value }: any) => {
-    console.log(value)
+    const working = get(state, 'working', [])
+
+    if (keyMap.ENTER.includes(value)) {
+      dispatch({
+        type: HISTORY_CHANGE,
+        value: working
+      })
+      dispatch({
+        type: WORKING_CLEAR
+      })
+      return
+    }
+
+    if (keyMap.SPACE.includes(value)) {
+      return dispatch({
+        type: WORKING_CLEAR
+      })
+    }
+
+    if (keyMap.BACK.includes(value)) {
+      return dispatch({
+        type: WORKING_REPLACE,
+        value: working.slice(0, working.length - 1)
+      })
+    }
+
+    return dispatch({
+      type: WORKING_CHANGE,
+      value: [value]
+    })
   }
 
   const handlers: any = {
@@ -72,7 +110,7 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
     SPACE: () => pressed({ value: 'space' }),
     PI: () => pressed({ value: 'pi' }),
     MINUS: () => pressed({ value: '-' }),
-    EQUALS: () => pressed({ value: '=' }),
+    ENTER: () => pressed({ value: 'enter' }),
     PLUS: () => pressed({ value: 'plus' })
   }
 
@@ -155,7 +193,7 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
           <CalculatorKey onClick={handlers.BACK} variant={'default'} last={false}>
             <FontAwesomeIcon icon={faBackspace} />
           </CalculatorKey>
-          <CalculatorKey value={'equals'} onClick={handlers.EQUALS} variant={'success'} last={true}>
+          <CalculatorKey onClick={handlers.EQUALS} variant={'success'} last={true}>
             <FontAwesomeIcon icon={faEquals} />
           </CalculatorKey>
         </Box>
