@@ -17,11 +17,14 @@ import { useStore } from 'src/hooks/useStore'
 import {
   WORKING_CHANGE,
   HISTORY_CHANGE,
+  HISTORY_REPLACE,
   WORKING_CLEAR,
+  RESULT_CLEAR,
   WORKING_REPLACE,
   RESULT_CHANGE
 } from 'src/reducers/StoreReducer/constants'
 import get from 'lodash/get'
+import { numberHelper } from 'src/utilities/numberHelper'
 
 interface CalculatorPropsInterface {
   width?: number
@@ -60,13 +63,82 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
   const { state, dispatch }: any = useStore()
   const working = get(state, 'working', [])
   const result = get(state, 'result', [])
+  const history = get(state, 'history', [])
   const hasPreviousData = working[working.length - 1] ? true : false
 
   const pressed = ({ value }: any) => {
-    if (keyMap.ENTER.includes(value)) {
+    const isSpacebar = keyMap.SPACE.includes(value)
+    const isBackspace = keyMap.BACK.includes(value)
+    const isPreviousDataOperator = numberHelper.isOperator(working[working.length - 1])
+    const isPreviousDataNumber = numberHelper.isNumbers(working[working.length - 1])
+    const isCurrentDataOperator = numberHelper.isOperator(value)
+    const isEnter = keyMap.ENTER.includes(value)
+
+    /* Remove the workings */
+    if (isSpacebar) {
       dispatch({
-        type: HISTORY_CHANGE,
-        value: working
+        type: WORKING_CLEAR
+      })
+      dispatch({
+        type: RESULT_CLEAR
+      })
+      return dispatch({
+        type: HISTORY_REPLACE,
+        value: [...history, ...result]
+      })
+    }
+
+    /* Clear the previous data */
+    if (isBackspace) {
+      return dispatch({
+        type: WORKING_REPLACE,
+        value: working.slice(0, working.length - 1)
+      })
+    }
+
+    /* Previous data has operator as well as now */
+    if (hasPreviousData && isPreviousDataOperator && isCurrentDataOperator) {
+      return
+    }
+
+    /* Previous data now adding operator */
+    if (hasPreviousData && isCurrentDataOperator) {
+      const workers = working.reduce(
+        (newWorking: any, item: string) => {
+          const hasOperator = numberHelper.isOperator(item)
+
+          if (hasOperator) {
+            return {
+              generate: '',
+              result: [...newWorking.result, newWorking.generate, item]
+            }
+          }
+
+          return {
+            generate: (newWorking.generate += String(item)),
+            result: newWorking.result
+          }
+        },
+        {
+          generate: '',
+          result: []
+        }
+      )
+
+      return dispatch({
+        type: WORKING_REPLACE,
+        value: [...workers.result, workers.generate, value]
+      })
+    }
+
+    /* Perform and calculate the data */
+    if (isEnter && hasPreviousData && !isPreviousDataOperator) {
+      dispatch({
+        type: RESULT_CHANGE,
+        value: {
+          total: numberHelper.performCalculation(working),
+          working
+        }
       })
       dispatch({
         type: WORKING_CLEAR
@@ -74,29 +146,26 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
       return
     }
 
-    if (keyMap.SPACE.includes(value)) {
-      return dispatch({
-        type: WORKING_CLEAR
-      })
-    }
-
-    if (keyMap.BACK.includes(value)) {
+    /* Concatenate the numbers only */
+    if (hasPreviousData && isPreviousDataNumber) {
       return dispatch({
         type: WORKING_REPLACE,
-        value: working.slice(0, working.length - 1)
+        value: [
+          ...working.slice(0, working.length - 1),
+          working.slice(working.length - 1, working.length) + value
+        ]
       })
     }
-
-    // if (
-    //   hasPreviousData &&
-    //   !['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(working[working.length - 1])
-    // ) {}
 
     return dispatch({
       type: WORKING_CHANGE,
       value: [value]
     })
   }
+
+  console.log('🚀 ~ file: index.tsx ~ line 166 ~ history', history)
+  console.log('🚀 ~ file: index.tsx ~ line 167 ~ working', working)
+  console.log('🚀 ~ file: index.tsx ~ line 168 ~ result', result)
 
   const handlers: any = {
     ZERO: () => pressed({ value: '0' }),

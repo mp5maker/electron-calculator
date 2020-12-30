@@ -32,7 +32,7 @@ export const StoreReducer = (state = defaultState, action: StoreReducerPropsInte
     case RESULT_CHANGE:
       return {
         ...state,
-        result: [...state.result, ...value]
+        result: [...state.result, { ...value }]
       }
     case WORKING_CLEAR:
       return {
@@ -47,7 +47,7 @@ export const StoreReducer = (state = defaultState, action: StoreReducerPropsInte
     case RESULT_CLEAR:
       return {
         ...state,
-        result: [...state.result, ...(isValueArray ? value : [])]
+        result: [...(isValueArray ? value : [])]
       }
     case WORKING_REPLACE:
       return {

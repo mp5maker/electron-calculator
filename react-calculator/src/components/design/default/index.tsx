@@ -4,6 +4,7 @@ import { Button } from 'src/components/button'
 import { useTheme } from 'src/hooks/useTheme'
 import { Text } from 'src/components/text'
 import { v4 } from 'uuid'
+import { numberHelper } from 'src/utilities/numberHelper'
 
 export const ButtonKey = ({ onClick, children, style }: any) => {
   const { theme } = useTheme()
@@ -49,19 +50,22 @@ export const Display = ({ working }: any) => {
       }}
     >
       {working.map((item: any) => {
-        if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(item)) {
+        if (numberHelper.isOperator(item)) {
           return (
-            <Text style={{ marginRight: 0 }} key={item + v4()}>
+            <Text
+              style={{
+                marginLeft: theme.spacing.extraSmall,
+                marginRight: theme.spacing.extraSmall
+              }}
+              key={item + v4()}
+            >
               {item}
             </Text>
           )
         }
 
         return (
-          <Text
-            style={{ marginLeft: theme.spacing.extraSmall, marginRight: theme.spacing.extraSmall }}
-            key={item + v4()}
-          >
+          <Text style={{ marginRight: 0 }} key={item + v4()}>
             {item}
           </Text>
         )
