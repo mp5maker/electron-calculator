@@ -25,6 +25,7 @@ import {
 } from 'src/reducers/StoreReducer/constants'
 import get from 'lodash/get'
 import { numberHelper } from 'src/utilities/numberHelper'
+import isNumber from 'lodash/isNumber'
 
 interface CalculatorPropsInterface {
   width?: number
@@ -64,13 +65,14 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
   const working = get(state, 'working', [])
   const result = get(state, 'result', [])
   const history = get(state, 'history', [])
-  const hasPreviousData = working[working.length - 1] ? true : false
+  const previousData = working[working.length - 1]
+  const hasPreviousData = previousData ? true : false
 
   const pressed = ({ value }: any) => {
     const isSpacebar = keyMap.SPACE.includes(value)
     const isBackspace = keyMap.BACK.includes(value)
-    const isPreviousDataOperator = numberHelper.isOperator(working[working.length - 1])
-    const isPreviousDataNumber = numberHelper.isNumbers(working[working.length - 1])
+    const isPreviousDataOperator = numberHelper.isOperator(previousData)
+    const isPreviousDataNumber = numberHelper.isNumbers(previousData)
     const isCurrentDataOperator = numberHelper.isOperator(value)
     const isEnter = keyMap.ENTER.includes(value)
 
@@ -155,6 +157,18 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
           working.slice(working.length - 1, working.length) + value
         ]
       })
+    }
+    if (hasPreviousData) {
+      const isPreviousDataNumber = isNumber(parseFloat(previousData))
+      if (isPreviousDataNumber && !numberHelper.isOperator(previousData)) {
+        return dispatch({
+          type: WORKING_REPLACE,
+          value: [
+            ...working.slice(0, working.length - 1),
+            working.slice(working.length - 1, working.length) + value
+          ]
+        })
+      }
     }
 
     return dispatch({
