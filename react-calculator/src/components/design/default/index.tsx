@@ -5,6 +5,7 @@ import { useTheme } from 'src/hooks/useTheme'
 import { Text } from 'src/components/text'
 import { v4 } from 'uuid'
 import { numberHelper } from 'src/utilities/numberHelper'
+import get from 'lodash/get'
 
 export const ButtonKey = ({ onClick, children, style }: any) => {
   const { theme } = useTheme()
@@ -32,45 +33,117 @@ export const ButtonKey = ({ onClick, children, style }: any) => {
   )
 }
 
-export const Display = ({ working }: any) => {
+export const Display = ({ working = [], result = [] }: any) => {
   const { theme } = useTheme()
 
+  const allTotal = result.reduce((newTotal: any, item: number) => {
+    const itemTotal = get(item, 'total', 0)
+    return (newTotal += itemTotal)
+  }, 0)
+
   return (
-    <Box
-      style={{
-        height: 100,
-        padding: theme.spacing.small,
-        boxShadow: theme.boxShadow.small,
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: theme.palette.warning.dark,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        flexWrap: 'wrap',
-        alignItems: 'flex-end'
-      }}
-    >
-      {working.map((item: any) => {
-        if (numberHelper.isOperator(item)) {
-          return (
+    <>
+      <Box
+        style={{
+          height: 100,
+          padding: theme.spacing.small,
+          boxShadow: theme.boxShadow.small,
+          borderRadius: theme.shape.borderRadius,
+          backgroundColor: theme.palette.warning.dark,
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <Box
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexWrap: 'wrap'
+          }}
+        >
+          {result.map((item: any, itemIndex: number) => {
+            const itemWorking = get(item, 'working', [])
+
+            return (
+              <React.Fragment key={itemIndex + v4()}>
+                {itemWorking.map((item: any, index: number) => {
+                  if (numberHelper.isOperator(item)) {
+                    return (
+                      <Text
+                        style={{
+                          marginLeft: theme.spacing.extraSmall,
+                          marginRight: theme.spacing.extraSmall
+                        }}
+                        key={index + v4()}
+                      >
+                        {item}
+                      </Text>
+                    )
+                  }
+
+                  return (
+                    <Text style={{ marginRight: 0 }} key={index + v4()}>
+                      {item}
+                    </Text>
+                  )
+                })}
+              </React.Fragment>
+            )
+          })}
+        </Box>
+        <Box
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexWrap: 'wrap',
+            alignItems: 'flex-end'
+          }}
+        >
+          <>
+            {working.map((item: any) => {
+              if (numberHelper.isOperator(item)) {
+                return (
+                  <Text
+                    style={{
+                      marginLeft: theme.spacing.extraSmall,
+                      marginRight: theme.spacing.extraSmall
+                    }}
+                    key={item + v4()}
+                  >
+                    {item}
+                  </Text>
+                )
+              }
+
+              return (
+                <Text style={{ marginRight: 0 }} key={item + v4()}>
+                  {item}
+                </Text>
+              )
+            })}
+          </>
+        </Box>
+        {Array.isArray(result) && result.length > 0 ? (
+          <Box
+            style={{
+              marginTop: 'auto',
+              display: 'flex',
+              justifyContent: 'flex-end'
+            }}
+          >
             <Text
               style={{
-                marginLeft: theme.spacing.extraSmall,
-                marginRight: theme.spacing.extraSmall
+                color: theme.palette.background.paper
               }}
-              key={item + v4()}
             >
-              {item}
+              {Number(allTotal).toFixed(3)}
             </Text>
-          )
-        }
-
-        return (
-          <Text style={{ marginRight: 0 }} key={item + v4()}>
-            {item}
-          </Text>
-        )
-      })}
-    </Box>
+          </Box>
+        ) : (
+          <></>
+        )}
+      </Box>
+    </>
   )
 }
 

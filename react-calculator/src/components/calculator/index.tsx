@@ -216,7 +216,7 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
           display: 'block'
         }}
       >
-        <Display working={working} />
+        <Display working={working} result={result} />
         <Box helper={'spaceBetween'}>
           <CalculatorKey onClick={handlers.SPACE} variant={'shadow'} last={false}>
             {t('C')}
@@ -283,7 +283,7 @@ export const Calculator: React.FC<CalculatorPropsInterface> = ({
           <CalculatorKey onClick={handlers.BACK} variant={'default'} last={false}>
             <FontAwesomeIcon icon={faBackspace} />
           </CalculatorKey>
-          <CalculatorKey onClick={handlers.EQUALS} variant={'success'} last={true}>
+          <CalculatorKey onClick={handlers.ENTER} variant={'success'} last={true}>
             <FontAwesomeIcon icon={faEquals} />
           </CalculatorKey>
         </Box>
